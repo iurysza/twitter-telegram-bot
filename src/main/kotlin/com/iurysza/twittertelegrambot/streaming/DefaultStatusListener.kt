@@ -1,4 +1,4 @@
-package com.iurysza.streaming
+package com.iurysza.twittertelegrambot.streaming
 
 import twitter4j.StallWarning
 import twitter4j.Status

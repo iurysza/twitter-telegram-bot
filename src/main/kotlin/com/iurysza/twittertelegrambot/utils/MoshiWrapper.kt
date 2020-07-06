@@ -1,4 +1,4 @@
-package com.iurysza.utils
+package com.iurysza.twittertelegrambot.utils
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

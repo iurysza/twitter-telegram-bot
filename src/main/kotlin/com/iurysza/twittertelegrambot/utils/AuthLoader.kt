@@ -1,6 +1,6 @@
-package com.iurysza.utils
+package com.iurysza.twittertelegrambot.utils
 
-import com.iurysza.model.AuthData
+import com.iurysza.twittertelegrambot.model.AuthData
 import com.twitter.hbc.httpclient.auth.OAuth1
 import java.io.File
 

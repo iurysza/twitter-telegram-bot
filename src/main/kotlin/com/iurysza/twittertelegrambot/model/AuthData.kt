@@ -1,4 +1,4 @@
-package com.iurysza.model
+package com.iurysza.twittertelegrambot.model
 
 import com.squareup.moshi.JsonClass
 

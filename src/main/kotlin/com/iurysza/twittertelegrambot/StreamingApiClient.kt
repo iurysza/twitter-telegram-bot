@@ -1,8 +1,8 @@
-package com.iurysza
+package com.iurysza.twittertelegrambot
 
-import com.iurysza.streaming.FilterParams
-import com.iurysza.streaming.FilteredStatusStream
-import com.iurysza.utils.AuthLoader
+import com.iurysza.twittertelegrambot.streaming.FilterParams
+import com.iurysza.twittertelegrambot.streaming.FilteredStatusStream
+import com.iurysza.twittertelegrambot.utils.AuthLoader
 
 fun main() {
     val filterParams = FilterParams(listOf(1278835179910504448L), listOf("@MandaProZap"))

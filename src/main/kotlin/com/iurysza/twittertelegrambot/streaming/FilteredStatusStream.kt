@@ -1,4 +1,4 @@
-package com.iurysza.streaming
+package com.iurysza.twittertelegrambot.streaming
 
 import com.twitter.hbc.ClientBuilder
 import com.twitter.hbc.core.Constants
