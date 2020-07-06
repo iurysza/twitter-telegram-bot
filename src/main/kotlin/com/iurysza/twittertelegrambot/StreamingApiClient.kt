@@ -6,9 +6,14 @@ import com.iurysza.twittertelegrambot.utils.AuthLoader
 
 fun main() {
     val filterParams = FilterParams(listOf(1278835179910504448L), listOf("@MandaProZap"))
-    val auth = AuthLoader.createAuthFrom("twitter_auth.json")
+    val authData = AuthLoader.getAuthDataFrom("twitter_auth.json")
 
-    FilteredStatusStream(auth, filterParams) { newStatus ->
-        println(newStatus)
+    val twitterClient = TwitterClient(authData)
+
+    FilteredStatusStream(authData, filterParams) { newStatus ->
+        twitterClient
+            .getStatus(newStatus!!.inReplyToStatusId)
+            ?.mediaEntities
+            ?.forEach { println(it) }
     }.start()
 }

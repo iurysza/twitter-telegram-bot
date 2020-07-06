@@ -1,19 +1,20 @@
 package com.iurysza.twittertelegrambot.streaming
 
+import com.iurysza.twittertelegrambot.model.AuthData
+import com.iurysza.twittertelegrambot.utils.AuthLoader
 import com.twitter.hbc.ClientBuilder
 import com.twitter.hbc.core.Constants
 import com.twitter.hbc.core.HttpHosts
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint
 import com.twitter.hbc.core.processor.StringDelimitedProcessor
 import com.twitter.hbc.httpclient.BasicClient
-import com.twitter.hbc.httpclient.auth.OAuth1
 import com.twitter.hbc.twitter4j.Twitter4jStatusClient
 import twitter4j.Status
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 
 class FilteredStatusStream(
-    private val auth: OAuth1,
+    private val authData: AuthData,
     private val filterParams: FilterParams,
     private val statusListener: (Status?) -> Unit
 ) {
@@ -62,7 +63,7 @@ class FilteredStatusStream(
     ): BasicClient? {
         return ClientBuilder()
             .hosts(HttpHosts(Constants.STREAM_HOST))
-            .authentication(auth)
+            .authentication(AuthLoader.toOAuth(authData))
             .endpoint(endpoint)
             .processor(StringDelimitedProcessor(msgQueue))
             .eventMessageQueue(LinkedBlockingQueue(capacity))
