@@ -1,6 +1,6 @@
-package com.iurysza.twittertelegrambot.streaming
+package com.iurysza.twittertelegrambot.twitter.streaming
 
-import com.iurysza.twittertelegrambot.model.AuthData
+import com.iurysza.twittertelegrambot.twitter.model.AuthData
 import com.iurysza.twittertelegrambot.utils.AuthLoader
 import com.twitter.hbc.ClientBuilder
 import com.twitter.hbc.core.Constants
@@ -16,11 +16,12 @@ import java.util.concurrent.LinkedBlockingQueue
 class FilteredStatusStream(
     private val authData: AuthData,
     private val filterParams: FilterParams,
-    private val statusListener: (Status?) -> Unit
+    private val statusListener: (Status) -> Unit
 ) {
 
     companion object {
-        private const val capacity = 1_000
+        private const val CAPACITY = 1_000
+        private const val THREAD_POOL_SIZE = 4
     }
 
     var statusClient: Twitter4jStatusClient? = null
@@ -29,8 +30,8 @@ class FilteredStatusStream(
         val (followings, terms) = filterParams
 
         val filters = createStatusFilters(followings, terms)
-        val msgQueue = LinkedBlockingQueue<String>(100 * capacity)
-        val client = createBasicClient(filters, msgQueue, capacity)
+        val msgQueue = LinkedBlockingQueue<String>(100 * CAPACITY)
+        val client = createBasicClient(filters, msgQueue, CAPACITY)
 
         statusClient = createStatusClient(client, msgQueue).apply {
             connect()
@@ -48,7 +49,7 @@ class FilteredStatusStream(
     private fun createStatusClient(
         client: BasicClient?,
         msgQueue: LinkedBlockingQueue<String>,
-        poolSize: Int = 4
+        poolSize: Int = THREAD_POOL_SIZE
     ) = Twitter4jStatusClient(
         client,
         msgQueue,
@@ -59,17 +60,15 @@ class FilteredStatusStream(
     private fun createBasicClient(
         endpoint: StatusesFilterEndpoint,
         msgQueue: LinkedBlockingQueue<String>,
-        capacity: Int
-    ): BasicClient? {
-        return ClientBuilder()
-            .hosts(HttpHosts(Constants.STREAM_HOST))
-            .authentication(AuthLoader.toOAuth(authData))
-            .endpoint(endpoint)
-            .processor(StringDelimitedProcessor(msgQueue))
-            .eventMessageQueue(LinkedBlockingQueue(capacity))
-            .build()
-    }
-}
+        eventQueueSize: Int
+    ) = ClientBuilder()
+        .hosts(HttpHosts(Constants.STREAM_HOST))
+        .authentication(AuthLoader.toOAuth(authData))
+        .endpoint(endpoint)
+        .processor(StringDelimitedProcessor(msgQueue))
+        .eventMessageQueue(LinkedBlockingQueue(eventQueueSize))
+        .build()
 
+}
 
 data class FilterParams(val followings: List<Long>, val terms: List<String>)

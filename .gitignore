@@ -25,7 +25,7 @@
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
-/src/main/resources/twitter_auth.json
+/src/main/resources/auth_data.json
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries

@@ -1,15 +1,10 @@
 package com.iurysza.twittertelegrambot.utils
 
-import com.iurysza.twittertelegrambot.model.AuthData
+import com.iurysza.twittertelegrambot.twitter.model.AuthData
 import com.twitter.hbc.httpclient.auth.OAuth1
 import java.io.File
 
 object AuthLoader {
-
-    fun createAuthFrom(fileName: String): OAuth1 {
-        val (consumerKey, consumerSecret, token, tokenSecret) = getAuthDataFrom(fileName)
-        return OAuth1(consumerKey, consumerSecret, token, tokenSecret)
-    }
 
     fun toOAuth(authData: AuthData): OAuth1 {
         val (consumerKey, consumerSecret, token, tokenSecret) = authData

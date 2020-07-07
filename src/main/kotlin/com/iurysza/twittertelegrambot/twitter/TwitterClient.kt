@@ -1,6 +1,6 @@
-package com.iurysza.twittertelegrambot
+package com.iurysza.twittertelegrambot.twitter
 
-import com.iurysza.twittertelegrambot.model.AuthData
+import com.iurysza.twittertelegrambot.twitter.model.AuthData
 import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
@@ -17,7 +17,7 @@ class TwitterClient(authData: AuthData) {
         twitter.oAuthAccessToken = accessToken
     }
 
-    fun getStatus(statusId: Long): Status? {
+    fun getStatusById(statusId: Long): Status? {
         return runCatching { twitter.showStatus(statusId) }.getOrNull()
     }
 }
