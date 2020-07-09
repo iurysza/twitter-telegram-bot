@@ -6,6 +6,11 @@ import twitter4j.StatusDeletionNotice
 import twitter4j.StatusListener
 
 class DefaultStatusListener(private val statusListener: (Status) -> Unit) : StatusListener {
+    override fun onStatus(status: Status?) {
+        println("newStatus Received: $status")
+        status?.let(statusListener)
+    }
+
     override fun onTrackLimitationNotice(numberOfLimitedStatuses: Int) {
         println("numberOfLimitedStatuses = $numberOfLimitedStatuses")
     }
@@ -20,11 +25,6 @@ class DefaultStatusListener(private val statusListener: (Status) -> Unit) : Stat
 
     override fun onDeletionNotice(statusDeletionNotice: StatusDeletionNotice?) {
         println("statusDeletionNotice: $statusDeletionNotice ")
-    }
-
-    override fun onStatus(status: Status?) {
-        println("newStatus Received: $status")
-        status?.let(statusListener)
     }
 
     override fun onScrubGeo(userId: Long, upToStatusId: Long) {

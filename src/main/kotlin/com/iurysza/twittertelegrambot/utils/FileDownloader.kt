@@ -20,10 +20,10 @@ object FileDownloader {
 
     suspend fun downloadAndWriteToFile(url: String): File? = withContext(Dispatchers.IO) {
         val body = service.downloadFileFrom(url).await()
-        writeBodyToFile(body)
+        writeToFile(body)
     }
 
-    private fun writeBodyToFile(responseBody: ResponseBody?): File? = runCatching {
+    private fun writeToFile(responseBody: ResponseBody?): File? = runCatching {
         File("${System.currentTimeMillis()}.mp4").apply {
             createNewFile()
             Okio.buffer(Okio.sink(this)).write(responseBody!!.bytes()!!)

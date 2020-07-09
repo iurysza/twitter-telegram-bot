@@ -6,7 +6,6 @@ import com.iurysza.twittertelegrambot.twitter.streaming.FilterParams
 import com.iurysza.twittertelegrambot.twitter.streaming.FilteredStatusStream
 import com.iurysza.twittertelegrambot.utils.AuthLoader
 import com.iurysza.twittertelegrambot.utils.FileDownloader
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -23,7 +22,7 @@ fun main() {
             ?.mediaEntities
             ?.mapNotNull { it.videoVariants.firstOrNull()?.url }
             ?.forEach { url ->
-                GlobalScope.launch(Dispatchers.IO) {
+                GlobalScope.launch {
                     FileDownloader.downloadAndWriteToFile(url)?.let { videoFile ->
                         telegramBot.sendVideo(authData.telegramUserId, videoFile)
                     }

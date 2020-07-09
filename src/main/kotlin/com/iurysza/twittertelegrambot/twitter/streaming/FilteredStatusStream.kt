@@ -27,29 +27,31 @@ class FilteredStatusStream(
     var statusClient: Twitter4jStatusClient? = null
 
     fun start() {
-        val (followings, terms) = filterParams
+        val (followings, keywords) = filterParams
 
-        val filters = createStatusFilters(followings, terms)
+        val filters = createStatusFilters(followings, keywords)
         val msgQueue = LinkedBlockingQueue<String>(100 * CAPACITY)
         val client = createBasicClient(filters, msgQueue, CAPACITY)
 
-        statusClient = createStatusClient(client, msgQueue).apply {
+        statusClient = createStatusClient(client, msgQueue, THREAD_POOL_SIZE).apply {
             connect()
             process()
         }
     }
 
-    private fun createStatusFilters(followings: List<Long>, terms: List<String>): StatusesFilterEndpoint {
-        return StatusesFilterEndpoint().apply {
-            followings(followings)
-            trackTerms(terms)
-        }
+    fun stop() {
+        statusClient?.stop()
+    }
+
+    private fun createStatusFilters(followings: List<Long>, terms: List<String>) = StatusesFilterEndpoint().apply {
+        followings(followings)
+        trackTerms(terms)
     }
 
     private fun createStatusClient(
         client: BasicClient?,
         msgQueue: LinkedBlockingQueue<String>,
-        poolSize: Int = THREAD_POOL_SIZE
+        poolSize: Int
     ) = Twitter4jStatusClient(
         client,
         msgQueue,
@@ -68,7 +70,6 @@ class FilteredStatusStream(
         .processor(StringDelimitedProcessor(msgQueue))
         .eventMessageQueue(LinkedBlockingQueue(eventQueueSize))
         .build()
-
 }
 
-data class FilterParams(val followings: List<Long>, val terms: List<String>)
+data class FilterParams(val followings: List<Long>, val keywords: List<String>)

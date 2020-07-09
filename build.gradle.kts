@@ -35,7 +35,7 @@ dependencies {
     implementation("org.slf4j:slf4j-log4j12:1.6.0")
     //endregion
 
-    //region Mosh
+    //region Moshi
     implementation("com.squareup.moshi:moshi:1.9.3")
     implementation("com.squareup.moshi:moshi-kotlin:1.9.3")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.9.3")
